@@ -1,0 +1,8 @@
+create table member(
+	no number primary key,
+	name varchar2(20),
+	age number,
+	addr varchar2(50)
+);
+
+create sequence seq_member;

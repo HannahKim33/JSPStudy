@@ -1,0 +1,2 @@
+미래에 만들어진 요소에 이벤트 연결: live
+$(".item").live("click",function(){})

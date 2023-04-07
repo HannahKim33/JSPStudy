@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=56838bc785c8fd4667758b2a70af317c&libraries=services"></script>
+<script type="text/javascript">
+$(function(){
+	var geocoder = new kakao.maps.services.Geocoder();
+	navigator.geolocation.getCurrentPosition(function(position){
+		//console.log("위도:"+position.coords.latitude);
+		//console.log("경도:"+position.coords.longitude);
+		
+		var coords=new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		
+		geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), pro);
+		geocoder.coord2Address(coords.getLng(), coords.getLat(), pro);
+		
+		function pro(result, status) {
+		    if (status === kakao.maps.services.Status.OK) {
+
+		        for(var i = 0; i < result.length; i++) {
+		            // 행정동의 region_type 값은 'H' 이므로
+		            if (result[i].region_type === 'H') {
+		                var addr = result[i].address_name;
+		                console.log(addr);
+		                $('#result').html(addr);
+		                break;
+		            }
+		        }
+		    }    
+		}
+	});
+})
+</script>
+</head>
+<body>
+	주소 : <div id="result"></div>
+</body>
+</html>

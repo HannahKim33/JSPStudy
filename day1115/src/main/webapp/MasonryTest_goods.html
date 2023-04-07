@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	*{
+		margin:0px;
+		padding:0px;
+	}
+	body{background-color:#525252;}
+	.item{
+		margin:10px;
+		width:100px;
+		height:180px;
+		background-color:white;
+		border-radius:10px;
+		float:left;
+	}
+	.big{
+		width:210px;
+		height:430px;
+	}
+	.normal{
+		width:210px;
+		height:210px;
+	}
+	.small{
+		width:100px;
+		height:180px;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		$.ajax({
+			url:"listGoods.jsp",
+			success:function(data){
+				$.each(data,function(){ //수정해야됨(이미지크기)
+					var div=$("<div></div>").addClass("item")
+					div.append($("<div></div>").html("<b>"+this.no+"</b>"));
+					div.append($("<img/>").attr({
+						src:"images/"+this.fname,
+						width:50,
+						height:50
+					}));
+					div.append($("<div></div>").html(this.name));
+					div.append($("<div></div>").html(this.price));
+					div.append($("<div></div>").html(this.qty));
+					
+					if((this.name).match("유니폼")){
+						div.addClass("big")
+						$(img).attr({width:200,height:300})
+					}else if((this.name).match("스타킹")){
+						div.addClass("small")
+					}else{
+						div.addClass("normal")
+						$(img).attr({width:200,height:150})
+					}
+					$("#masonry_container").append(div)
+				})
+				
+				$("#masonry_container").masonry({
+					itemSelector:'.item',
+					columnWidth:115
+				})
+			}
+		})
+		
+		
+	})
+</script>
+</head>
+<body>
+	<div id="masonry_container">
+		
+	</div>
+</body>
+</html>

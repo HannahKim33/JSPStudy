@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="jquery.validate.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#my_form").validate()
+	})
+</script>
+</head>
+<body>
+	<form id="my_form">
+		<table>
+			<tr>
+				<td><label>이름</label></td>
+				<td><input type="text" name="name" class="required" minlength="2"></td>
+			</tr>
+			<tr>
+				<td><label>이메일</label></td>
+				<td><input type="text" name="email" class="required email"></td>
+			</tr>
+			<tr>
+				<td><label>홈페이지</label></td>
+				<td><input type="text" name="homepage" class="required url"></td>
+			</tr>
+		</table>
+		<input type="submit" value="SEND">
+	</form>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!-- 수업 때 한 거 아님. 내가 실험하려고 만든 거 -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var i=0;
+		setInterval(function(){
+			$('#count').html(i++)
+		},1000);
+		$('#btnOK').click(function(){
+			$('#nameoutput').html($('#name').val());
+		});
+	})
+	
+</script>
+</head>
+<body>
+	<div id="count"></div>
+	이름 : <div id="nameoutput"></div>
+	이름 : <input type="text" id="name"><br>
+	<button id="btnOK">이름</button>
+	
+</body>
+</html>

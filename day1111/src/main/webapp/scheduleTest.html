@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="jquery-ui-1.13.1.custom/jquery-ui.min.css">
+<style type="text/css">
+	body{
+		font-size:62.5%;
+	}
+	h1{text-align:center;}
+	input[type=text],label{
+		margin-bottom:12px;
+		padding:.4em;
+		width:95%;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	function listSchedule(){
+		$("#output").empty();
+		$.ajax({
+			url:"Schedule",
+			success:function(arr){
+				$.each(arr,function(){
+					console.log(arr);
+					var id=$("<p></p>").html(this.id);
+					var name=$("<p></p>").html(this.name);
+					var sdate=$("<p></p>").html(this.sdate);
+					$("#output").append(id,name,sdate);
+				})
+			}
+		})
+	}
+	listSchedule();
+	
+	$("#open_button").click(function(){
+		$("#f").dialog("open");
+	})
+	$("#f").dialog({
+		autoOpen:false,
+		modal:true,
+		buttons:{
+			submit:function(){
+				$.ajax({
+					url:"Schedule",
+					data:$("#form1").serialize(),
+					type:"post",
+					success:function(re){
+						console.log(re);
+						listSchedule();
+					}
+				})
+				$("#event_name").val("");
+				$("#event_date").val("");
+				$("#f").dialog("close");
+			},
+			reset:function(){
+				$("#event_name").val("");
+				$("#event_date").val("");
+			},
+			cancel:function(){
+				$("#event_name").val("");
+				$("#event_date").val("");
+				$("#f").dialog("close");
+			}
+		}
+	});
+	$("#event_date").datepicker({
+		dateFormat:"yy/mm/dd",
+		numberOfMonths:3
+	});
+})
+</script>
+</head>
+<body>
+	<h1 id="open_button">일정 생성</h1>
+	<hr>
+	<div id="output"></div>
+	<div id='f'>
+		<h1>일정 등록</h1>
+		<form id="form1">
+			<label for="event_name">일정이름</label>
+			<input type="text" id="event_name" name="name"><br>
+			<label for="event_date">날짜</label>
+			<input type="text" id="event_date" name="sdate">
+		</form>
+	</div>
+</body>
+</html>

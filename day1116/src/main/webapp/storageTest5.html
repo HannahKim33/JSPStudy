@@ -1,0 +1,44 @@
+<!-- 미완 -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#btnSaveSession").click(function(){
+			var arr=[
+				{
+					name:'홍길동',
+					age:20,
+					addr:'서울'
+				},
+				{
+					name:'이순신',
+					age:22,
+					addr:'인천'
+				},
+				{
+					name:'김유신',
+					age:30,
+					addr:'대전'
+				}
+			];
+			var str=JSON.stringify(arr);
+			sessionStorage.setItem("data",str);
+		})
+		$("#btnReadSession").click(function(){
+			var data=sessionStorage.getItem("data");
+			var obj=JSON.parse(data);
+			console.log(obj);
+		})
+	})
+</script>
+</head>
+<body>
+	<h3>session Storage</h3>
+	<button id="btnSaveSession">저장</button>
+	<button id="btnReadSession">조회</button>
+</body>
+</html>

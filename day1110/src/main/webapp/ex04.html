@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	#form1 span{
+		width:70px;
+		display:inline-block;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var listMembers=function(){
+		$.ajax({
+			url:"listMembers.jsp",
+			success:function(data){
+				$("#table").empty();
+				$.each(data,function(){ //매개변수 한 개: index / 두개: index, 값
+					var tr=$("<tr></tr>").addClass("tr")
+					$(tr).append($("<td></td>").html(this.no));
+					$(tr).append($("<td></td>").html(this.name));
+					$(tr).append($("<td></td>").html(this.gender));
+					$(tr).append($("<td></td>").html(this.addr));
+					$(tr).append($("<td></td>").html(this.bloodType));
+					$('#table').append(tr);
+				})
+			}
+		})
+	}
+	listMembers();
+	$('#form1').submit(function(e){
+		e.preventDefault();
+		var arr=$('#form1').serializeArray();
+		$.ajax({
+			url:"insertMembers.jsp",
+			data:arr,
+			success:function(re){
+				listMembers();
+				alert(re);
+				
+				$("#no_span").html("");
+				$("#no").val("");
+				$("#name").val("");
+				$("#gender").val("");
+				$("#addr").val("");
+				$("#bloodType").val("");
+			}
+		})
+	})
+	$(document).on("click",".tr",function(){
+		console.log(this);
+		var td_arr=$(this).find("td");
+		console.log($(td_arr[0]).html());
+		
+		$("#no").val($(td_arr[0]).html());
+		$("#no_span").html($(td_arr[0]).html());
+		$("#name").val($(td_arr[1]).html());
+		$("#gender").val($(td_arr[2]).html());
+		$("#addr").val($(td_arr[3]).html());
+		$("#bloodType").val($(td_arr[4]).html());
+	})
+	$("#btnUpdate").click(function(){
+		//if($("#name").val()!="" && $("#gender").val()!="" && $("#addr").val()!="" && $("#bloodType").val()!=""){
+			var qstr=$("#form1").serialize();
+			$.ajax({
+				url:"updateMembers.jsp",
+				data:qstr,
+				success:function(re){
+					console.log("update_re:",re);
+					listMembers();
+					$("#no_span").html("");
+					$("#no").val("");
+					$("#name").val("");
+					$("#gender").val("");
+					$("#addr").val("");
+					$("#bloodType").val("");
+				}
+			})
+	})
+	$("#btnDelete").click(function(){
+		if(confirm("정말로 삭제하시겠습니까?")){
+			$.ajax({
+				url:"deleteMembers.jsp",
+				data:{no:$("#no").val()},
+				success:function(re){
+					console.log("del_re:",re);
+					listMembers();
+					$("#no_span").html("");
+					$("#no").val("");
+					$("#name").val("");
+					$("#gender").val("");
+					$("#addr").val("");
+					$("#bloodType").val("");
+				}
+			})
+		}
+	})
+})
+</script>
+</head>
+<body>
+	<form id="form1">
+		<span>번호</span> <span id="no_span"></span><input type="hidden" id="no" name="no"><br>
+		<span>이름</span> <input id="name" name="name" required="required"><br>
+		<span>성별</span> <input id="gender" name="gender" required="required"><br>
+		<span>지역</span> <input id="addr" name="addr" required="required"><br>
+		<span>혈액형</span> <input id="bloodType" name="bloodType" required="required"><br>
+		<input type="submit" value="추가">		
+	</form>
+	<button id="btnUpdate">수정</button>
+	<button id="btnDelete">삭제</button>
+	
+	<table id="table" border='1' width="60%">
+	</table>
+</body>
+</html>

@@ -1,0 +1,14 @@
+http://apis.data.go.kr/1360000/VilageFcstMsgService/getLandFcst?serviceKey=E4OUZmcKbG9FHlYn1Ye6YtbyNC20Bp7VujfjR5r5mguwvq34Sgm9E19ro9JL9IN4fbP9l6ZlLFhBX0OQKOShSw%3D%3D&numOfRows=10&pageNo=1&regId=11B10101
+
+create table members(
+no number primary key,
+name varchar2(20),
+gender varchar2(10),
+addr varchar2(100),
+bloodType varchar(10))
+
+create sequence seq_members;
+
+insert into members(name,gender,addr,bloodtype) values(1,'연하진','여자','관악구','B형');
+insert into members(name,gender,addr,bloodtype) values(2,'윤아란','여자','강동구','B형');
+

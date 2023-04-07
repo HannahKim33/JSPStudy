@@ -1,0 +1,19 @@
+create table chatmessage(
+	id number primary key,
+	name varchar2(20),
+	message varchar2(100)
+);
+
+create sequence seq_chatmessage;
+
+
+
+min.css: compressed version. 모든 코드를 한 줄에 씀
+
+create table schedule(
+	id number primary key,
+	name varchar2(20),
+	sdate date
+);
+
+create sequence seq_schedule;

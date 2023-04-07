@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.page{
+		margin-right:5px;
+	}
+	.highlight{background:yellow;}
+	.active{background:pink;}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=56838bc785c8fd4667758b2a70af317c"></script>
+<script type="text/javascript">
+	$(function(){
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+	        level: 3 // 지도의 확대 레벨
+	    };
+
+		var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다       
+		
+		var list=[];
+		var pageSIZE=10; 	//한 화면에 보여줄 레코드의 수
+		var totalRecord=0; 	//전체 레코드의 수
+		var totalPage=1;	//전체 페이지 수
+		
+		$.get('전국전동휠체어급속충전기표준데이터.xml',function(data){			
+			var arr=$(data).find("record");
+			$.each(arr,function(){
+				var addr=$(this).find("소재지도로명주소").text()
+				if(addr.indexOf("서울")>=0){
+					list.push(this);
+				}
+			})	    
+			totalRecord=list.length;
+			totalPage=Math.ceil(totalRecord/pageSIZE);
+			for(i=1; i<=totalPage;i++){
+				var span=$("<span></span>").html(i).addClass("page");
+				$("#pageStr").append(span);
+			}
+			pageData(1);
+			
+			var moveLatLon = new kakao.maps.LatLng($(list[0]).find('위도').html(), $(list[0]).find('경도').html());
+		    map.panTo(moveLatLon); 	
+		    var marker = new kakao.maps.Marker({
+		        position: moveLatLon
+		    });
+		    marker.setMap(map);
+		})
+		
+		$(document).on('click','.page',function(){
+			var pageNUM=eval($(this).html());
+			pageData(pageNUM);
+			
+		})
+		
+		$(document).on("click",".tr",function(){
+			
+			var td=$(this).find('td')
+			var movePosition=new kakao.maps.LatLng($(td[1]).html(),$(td[2]).html());
+			map.panTo(movePosition);
+			var marker = new kakao.maps.Marker({
+		        position: movePosition
+		    });
+		    marker.setMap(map);
+		    $('.tr').removeClass("active");
+		    $(this).addClass('active');
+		})
+		
+		$(document).on("mouseover",".tr",function(){
+			$(this).addClass("highlight");
+		})
+		$(document).on("mouseleave",".tr",function(){
+			$(this).removeClass("highlight");
+		})
+		
+		var pageData=function(pageNUM){
+			var start=(pageNUM-1)*pageSIZE;
+			var end=start+pageSIZE-1;
+			
+			if(end>totalRecord){
+				end=totalRecord-1;
+			}
+			$('#list').empty();
+			for(i=start;i<=end;i++){
+				var 시설명=$(list[i]).find("시설명").text();
+				var 위도=$(list[i]).find("위도").text();
+				var 경도=$(list[i]).find("경도").text();
+				var 평일운영시작시각=$(list[i]).find("평일운영시작시각").text();
+				var 평일운영종료시각=$(list[i]).find("평일운영종료시각").text();
+				var 관리기관전화번호=$(list[i]).find("관리기관전화번호").text();
+				var tr=$('<tr></tr>').addClass("tr");
+				tr.append($("<td></td>").html(시설명));
+				tr.append($("<td></td>").html(위도));
+				tr.append($("<td></td>").html(경도));
+				tr.append($("<td></td>").html(평일운영시작시각));
+				tr.append($("<td></td>").html(평일운영종료시각));
+				tr.append($("<td></td>").html(관리기관전화번호));
+				$('#list').append(tr);
+			}
+		}
+	})
+</script>
+</head>
+<body>
+	<table border='1'>
+		<thead>
+			<tr>
+				<th>시설명</th>
+				<th>위도</th>
+				<th>경도</th>
+				<th>평일운영시작시각</th>
+				<th>평일운영종료시각</th>
+				<th>관리기관전화번호</th>
+			</tr>
+		</thead>
+		<tbody id="list"></tbody>
+	</table>
+	<div id="pageStr"></div>
+	<div id="map" style="width:100%;height:350px;"></div>
+</body>
+</html>

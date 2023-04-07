@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="sist.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var key="E4OUZmcKbG9FHlYn1Ye6YtbyNC20Bp7VujfjR5r5mguwvq34Sgm9E19ro9JL9IN4fbP9l6ZlLFhBX0OQKOShSw%3D%3D";
+		var regId="";
+		var tmFc=getTmFc();
+		
+		var today=new Date();
+		var year=today.getFullYear();
+		var month=today.getMonth();
+		var date=today.getDate();
+		var date_this=date+3;
+		
+		var lastdate=[31,28,31,30,31,30,31,31,30,31,30,31];
+			
+		var date_arr=$("#date").find("td");
+		$.each(date_arr,function(){
+			if(date_this>lastdate[month]){
+				date_this=1;
+				month++;
+				if(month>11){
+					month=0;
+					year++;
+				}
+			}
+			
+			$(this).text(year+"/"+(month+1)+"/"+date_this);
+			date_this++;
+		})
+
+		var arr={"11B00000":"서울,인천,경기도",
+				"11D10000":"강원도영서",
+				"11D20000":"강원도영동",
+				"11C20000":"대전, 세종, 충청남도",
+				"11C10000":"충청북도",
+				"11F20000":"광주, 전라남도",
+				"11F10000":"전라북도",
+				"11H10000":"대구, 경상북도",
+				"11H20000":"부산, 울산, 경상남도",
+				"11G00000":"제주도"
+		};
+		
+		$.each(arr,function(key,value){
+			var option=$("<option></option>").html(value).attr("value",key);
+			$("#regId").append(option);
+		})
+
+		$("#btnOK").click(function(){
+			regId=$('#regId').val();
+			var url="http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?dataType=JSON&serviceKey="+key+"&numOfRows=10&pageNo=1&regId="+regId+"&tmFc="+tmFc;
+			$.ajax({
+				url:url,
+				success:function(data){
+					console.log(data);
+					$('#list').empty();
+					var item=data.response.body.items.item[0];
+					var tr=$("<tr></tr>");
+					$.each(item,function(key,value){
+						if(key.match("wf") && key.length>4){
+							$(tr).append($("<td></td>").html(value))
+						}
+					})
+					$("#list").append(tr);
+				}
+			})
+		})
+	})
+</script>
+</head>
+<body>
+	<select id="regId"></select>
+	<button id="btnOK">중기육상예보조회</button>
+	<hr>
+	<table border='1'>
+		<tr id="date">
+			<td colspan='2'>날짜1</td>
+			<td colspan='2'>날짜2</td>
+			<td colspan="2">날짜3</td>
+			<td colspan='2'>날짜4</td>
+			<td colspan="2">날짜5</td>
+		</tr>
+		<tr>
+			<td width="80">오전</td>
+			<td width="80">오후</td>
+			<td width="80">오전</td>
+			<td width="80">오후</td>
+			<td width="80">오전</td>
+			<td width="80">오후</td>
+			<td width="80">오전</td>
+			<td width="80">오후</td>
+			<td width="80">오전</td>
+			<td width="80">오후</td>
+		</tr>
+		<tbody id="list"></tbody>
+	</table>
+</body>
+</html>

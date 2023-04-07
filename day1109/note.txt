@@ -1,0 +1,4 @@
+http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst?serviceKey=E4OUZmcKbG9FHlYn1Ye6YtbyNC20Bp7VujfjR5r5mguwvq34Sgm9E19ro9JL9IN4fbP9l6ZlLFhBX0OQKOShSw%3D%3D&numOfRows=10&pageNo=1&stnId=109&tmFc=202211090600
+
+
+http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=인증키&numOfRows=10&pageNo=1&regId=11D20501&tmFc=201404080600

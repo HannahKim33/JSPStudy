@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.goods{
+	display:inline-block;
+	width:250px;
+	height:300px;
+	border:solid 2px pink;
+	border-radius:15px;
+	margin:30px;
+	padding:10px;
+}
+ul{
+	overflow:hidden;
+}
+li{
+	float:left;
+	list-style:none;
+	padding:10px;
+	cursor:pointer;
+}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//최초에 AJAX 통신을 하여 서버로부터 읽어온 모든 상품을 배열에 저장해둔다.
+		var list;
+		var pageSIZE=4;		//한 화면에 보여줄 상품의 수
+		var totalRecord=0;	//전체 상품의 수
+		var totalPage=1;	//전체 페이지 수
+		
+		//전체 페이지를 출력하는 함수
+		function printPage(){
+			for (i=1;i<=totalPage;i++){
+				var li=$("<li></li>").html(i).addClass("li");
+				$(".paging_button").append(li);
+			}
+		}
+		
+	
+		
+		//현재 페이지에 따른 상품을 출력하는 함수
+		function printItem(pageNUM){
+			//현재 페이지에 출력할 시작인덱스와 마지막 인덱스를 계산한다.
+			var start=(pageNUM-1)*pageSIZE;
+			var end=start+pageSIZE-1;
+			if(end>=totalRecord){
+				end=totalRecord;
+				console.log(end);
+				console.log(totalRecord);
+			}
+			for (i=start;i<=end;i++){
+				var row=list[i];
+				var div=$("<div></div>").addClass("goods");
+				var noname=$("<div></div>").html("<b>"+row.no+": "+row.name+"</b>");
+				var price=$("<div></div>").html("가격: "+row.price);
+				var qty=$("<div></div>").html("수량: "+row.qty);
+				
+				var img=$("<img/>").attr({
+					src:"images/"+row.fname,
+					width:"200",
+					height:"200"
+				})
+				$(div).append(noname,img,price,qty);
+				$("#list").append(div);
+			}
+		}
+		
+		
+		$.ajax({
+			url:"listGoods.jsp",
+			success:function(arr){
+				list=arr;
+				totalRecord=arr.length;
+				totalPage=Math.ceil(totalRecord/pageSIZE)
+				printItem(1);	//1페이지의 상품목록을 출력
+				printPage();	//전체페이지를 출력
+			}
+		})
+		
+		$(document).on("click",".li",function(){
+			$("#list").empty();
+			var pageNUM=eval($(this).html());
+			printItem(pageNUM);
+		})
+	})
+</script>
+</head>
+<body>
+	<ul class="paging_button"></ul>
+	<div id="list"></div>
+	<ul class="paging_button"></ul>
+</body>
+</html>

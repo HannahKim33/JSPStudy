@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="sist.js"></script>
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+		url:"code.txt",
+		success:function(data){
+			var arr=data.split("\n");
+			$.each(arr,function(){
+				var row=this.split(",");
+				var option=$("<option></option>").html(row[1]).attr("value",row[0]);
+				$('#regId').append(option);
+			})
+		}
+	})
+	/*
+	var option_arr={"11B10101":"서울",
+			"11B20201":"인천",
+			"11B20601":"수원",
+			"11B20305":"파주",
+			"11D10301":"춘천",
+			"11D10401":"원주",
+			"11D20501":"강릉",
+			"11C20401":"대전",
+			"11C20101":"서산",
+			"11C20404":"세종",
+			"11C10301":"청주",
+			"11G00201":"제주"};
+	$.each(option_arr,function(key,value){
+		var option=$("<option></option>").html(value).attr("value",key);
+		$('#regId').append(option);
+	})*/
+	
+	var key="E4OUZmcKbG9FHlYn1Ye6YtbyNC20Bp7VujfjR5r5mguwvq34Sgm9E19ro9JL9IN4fbP9l6ZlLFhBX0OQKOShSw%3D%3D";
+	var tmFc=getTmFc();
+	
+	
+	var today=new Date();
+	today.setDate(today.getDate()+2);
+	var date_arr=$("#date").find("td");
+	
+	$.each(date_arr,function(){
+		today.setDate(today.getDate()+1);
+		var date_table=today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate();
+		$(this).text(date_table);
+	})
+	
+	$('#btnOK').click(function(){
+		var regId=$("#regId").val();
+		var url="http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey="+key+"&numOfRows=10&pageNo=1&regId="+regId+"&tmFc="+tmFc;
+		$.ajax({
+			url:url,
+			success:function(data){
+				$("#tr").empty();
+				for(i=3; i<=10; i++){
+					var min=$(data).find("taMin"+i).text();
+					var max=$(data).find("taMax"+i).text();
+					$('#tr').append($("<td></td>").html(min));
+					$('#tr').append($("<td></td>").html(max));
+				}
+			}
+		})
+	})
+})
+</script>
+</head>
+<body>
+	<select id="regId"></select>
+	<button id="btnOK">중기기온조회</button>
+	<table border='1'>
+		<tr id='date'>
+			<td colspan='2'>1</td>
+			<td colspan='2'>2</td>
+			<td colspan='2'>3</td>
+			<td colspan='2'>4</td>
+			<td colspan='2'>5</td>
+			<td colspan='2'>6</td>
+			<td colspan='2'>7</td>
+			<td colspan='2'>8</td>
+		</tr>
+		<tr>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+			<td width="80">최저</td>
+			<td width="80">최고</td>
+		</tr>
+		<tr id="tr">
+		</tr>
+	</table>
+</body>
+</html>

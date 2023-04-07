@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="jquery-ui-1.13.1.custom/jquery-ui.min.css">
+<style type="text/css">
+	.box{
+		padding: 5px;
+	}
+	.box p{
+		margin:0px;
+		padding:5px;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		function reset(){
+			var resetClass="ui-corner-all ui-widget-content box";
+			$("#output").attr("class",resetClass);
+		}
+		reset();
+		
+		$("#menu").buttonset();
+		
+		$("#menu > input").change(function(){
+			reset();
+			$("#output").addClass("ui-state-"+$(this).val());
+		});
+		
+		$("button").click(function(){
+			reset();
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="menu">
+		<input type="radio" name="theme" id="highlight" value="highlight"/>
+		<label for="highlight">highlight</label>
+		
+		<input type="radio" name="theme" id="error" value="error"/>
+		<label for="error">error</label>
+		
+		<input type="radio" name="theme" id="error_text" value="error_text"/>
+		<label for="error_text">error_text</label>
+		
+		<input type="radio" name="theme" id="disabled" value="disabled"/>
+		<label for="disabled">disabled</label>
+		
+		<button>RESET</button>
+	</div>
+	<div id="output">
+		<p>윤석열 대통령, 조 바이든 미국 대통령, 기시다 후미오(岸田文雄) 일본 총리가 13일(현지시간) 캄보디아 프놈펜에서 정상회담을 열고 3국 파트너십을 “전례 없는 수준”으로 평가하고, 포괄적 수준에서 공고히 하기로 했다. 미국의 인도·태평양 전략에 발맞춰 미·중 패권 다툼에서 미국 지지를 분명히 한 것으로 보인다. 대북 대응에선 미국의 북한 미사일 경보 정보를 실시간으로 공유하고 3국 간 경제안보대화체를 신설하기로 했다.
+		세 정상은 이날 한·미·일 정상회담을 연 뒤 발표한 ‘인도·태평양 한·미·일 3국 파트너십에 대한 프놈펜 성명’(프놈펜 성명)에서 “3국 정상은 안보 영역 및 그 외 영역에서 긴밀한 3국 연대를 공고히 해나가기로 했다”고 밝혔다. 3국 정상 간 포괄적 성격의 공동성명을 채택한 것은 처음이라고 대통령실은 설명했다. 3국은 한·미, 한·일, 미·일 정상회담을 연쇄적으로 열면서 연대 수위를 끌어올렸다.
+
+3국 정상회담은 지난 6월 북대서양조약기구(나토) 정상회의를 계기로 스페인 마드리드에서 열린 이후 5개월 만이다.
+
+세 정상은 대륙간탄도미사일(ICBM) 발사를 포함한 최근 북한의 연이은 도발을 강력 규탄했다. 북한의 7차 핵실험 강행 시 단호한 대응에 나서기로 하면서 확장억제력 강화를 위한 3국 협력을 강조했다. 윤 대통령은 “한·미·일이 연대해 북한의 무모한 도발은 절대 성공하지 못한다는 것을 보여줘야 한다”고 말했다. 바이든 대통령은 “한국과 일본에 대한 미국의 확장억제 강화 공약은 강력해질 뿐”이라면서 각국의 탐지·평가 능력을 향상시키기 위해 북한 미사일 경보 정보 실시간 공유 의향을 밝혔다.
+		</p>
+	</div>
+</body>
+</html>

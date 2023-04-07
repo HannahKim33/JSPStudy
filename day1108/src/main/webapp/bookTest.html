@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.highlight{background:yellow;}
+	.active{background:pink;}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	function listBook(){
+		$('#list').empty();
+		$.ajax({
+			url:"ListBook",
+			success:function(arr){
+				$.each(arr,function(){
+					var li=$("<li></li>").html(this.bookname).addClass("book");
+					$(li).attr({
+						bookid:this.bookid,
+						bookname:this.bookname,
+						publisher:this.publisher,
+						price:this.price
+					})
+					$('#list').append(li);
+				});
+			}
+		})
+	}
+	
+	$('#form1').submit(function(e){
+		//var data=$(this).serialize();둘다됨
+		var data=$(this).serializeArray();
+		$.ajax({
+			url:"InsertBook",
+			data:data,
+			success:function(re){
+				alert(re);
+				listBook();
+			}
+		})
+		e.preventDefault();
+	})
+	listBook();
+	
+	$("#btnNew").click(function(){
+		$.ajax({
+			url:"GetNextBookid",
+			success:function(bookid){
+				$('#bookid').val(bookid);
+				$("#bookid_span").html(bookid);
+			}
+		})
+	});
+	$(document).on("click",".book",function(){
+		$('#bookid').val($(this).attr("bookid"));
+		$('#bookname').val($(this).attr("bookname"));
+		$('#publisher').val($(this).attr("publisher"));
+		$('#price').val($(this).attr("price"));
+		
+		$(".book").removeClass("active");
+		$(this).addClass("active");
+	})
+	
+	$(document).on("mouseover",".book",function(){
+		$(this).addClass("highlight");
+	})
+	
+	$(document).on("mouseleave",".book",function(){
+		$(this).removeClass("highlight");
+	})
+	
+	$('#btnUpdate').click(function(){
+		var data=$('#form1').serialize();
+		console.log($('#form1').serialize());
+		console.log($('#form1').serializeArray());
+		$.ajax({
+			url:"UpdateBook",
+			data:data,
+			success:function(re){
+				alert(re);
+				listBook();
+			}
+		})
+	})
+	
+	$('#btnDelete').click(function(){
+		$.ajax({
+			url:"DeleteBook",
+			data:{bookid:$('#bookid').val()},
+			success:function(re){
+				alert(re);
+				listBook();
+			}
+		})
+	})
+	
+})
+</script>
+</head>
+<body>
+	<ul id="list"></ul>
+	<form id="form1">
+		도서번호 : <input type="number" name="bookid" id="bookid" readonly="readonly"><br>
+		도서이름 : <input name="bookname" id="bookname"><br>
+		출판사 : <input name="publisher" id="publisher"><br>
+		가격 : <input type="number" name="price" id="price"><br>
+		<input type="button" value="도서 번호 발행" id="btnNew">
+		<input type="submit" value="확인">
+		<input type="button" value="수정" id="btnUpdate">
+		<input type="button" value="삭제" id="btnDelete">
+	</form>
+</body>
+</html>

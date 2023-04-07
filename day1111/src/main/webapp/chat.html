@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#form1").submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			url:"ChatMessage",
+			type:"POST",
+			data:$("#form1").serialize(),
+			success:function(re){
+				$("#message").val("");
+			}
+		})
+	})
+	
+	function listContent(){
+		$.ajax({
+			url:"ChatMessage",
+			type:"GET",
+			success:function(arr){
+				$("#content").empty();
+				$.each(arr,function(){
+					var row=$("<div></div>").html(this.name+"==>"+this.message);
+					$("#content").append(row);
+				})
+			}
+		})
+	}
+	
+	listContent();
+	
+	setInterval(function(){
+		listContent();
+	},1000);
+	
+})
+</script>
+</head>
+<body>
+	<form id="form1">
+		닉네임 <input name="name" id="name"><br>
+		메시지 <textarea rows="3" cols="50" name="message" id="message"></textarea><br>
+		<input type="submit" value="글쓰기">
+	</form>
+	<hr>
+	<div id="content"></div>
+</body>
+</html>
